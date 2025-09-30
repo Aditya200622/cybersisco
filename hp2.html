@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CyberSisco — Learn to Solve Cybercrime</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg-gradient-start:#E5F7F4;
+      --bg-gradient-end:#D7F2EE;
+      --green:#00C29A;
+      --black:#000000;
+      --muted:#555555;
+      --muted-2:#666666;
+      --card:#ffffff;
+      --radius:14px;
+      --maxw:1200px;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:"Inter", sans-serif;background:linear-gradient(135deg,var(--bg-gradient-start),var(--bg-gradient-end));color:var(--black);line-height:1.6;overflow-x:hidden}
+    .container{max-width:var(--maxw);margin:0 auto;padding:0 24px}
+
+    [data-animate]{opacity:0;transform:translateY(40px);transition:all .8s ease}
+    [data-animate].active{opacity:1;transform:translateY(0)}
+
+    .top-banner{background:#000;color:#fff;text-align:center;padding:8px 16px;font-size:14px;display:flex;justify-content:center;align-items:center;gap:12px}
+    .top-banner a{background:#fff;color:#000;padding:6px 14px;border-radius:999px;font-weight:600;text-decoration:none}
+
+    .nav{position:sticky;top:0;z-index:50;background:#fff;border-bottom:1px solid #e5e7eb}
+    .nav-inner{display:flex;align-items:center;justify-content:space-between;padding:14px 0}
+    .brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:22px;color:var(--black)}
+    .brand img{height:28px}
+    .nav-links{display:flex;gap:24px;align-items:center}
+    .nav-links a{color:var(--black);text-decoration:none;font-weight:500;transition:.3s}
+    .nav-links a:hover{color:var(--green)}
+    .btn{background:var(--green);color:#fff;padding:10px 18px;border-radius:999px;font-weight:600;text-decoration:none;transition:.3s;border:1px solid transparent}
+    .btn:hover{opacity:.9}
+    .btn.white{background:#fff;color:var(--black);border:1px solid var(--green)}
+
+    .dropdown{position:relative}
+    .dropdown > a{cursor:pointer;display:inline-block;padding:8px 0}
+    .dropdown-menu{
+      position:absolute;top:100%;left:0;
+      background:#fff;border:1px solid #e5e7eb;
+      border-radius:10px;box-shadow:0 6px 20px rgba(0,0,0,0.1);
+      display:none;flex-direction:column;min-width:180px;
+      padding:10px 0;z-index:99;
+    }
+    .dropdown-menu a{padding:10px 16px;color:var(--black);text-decoration:none;font-weight:500;transition:0.2s}
+    .dropdown-menu a:hover{background:var(--bg-gradient-end);color:var(--green)}
+    .dropdown:hover .dropdown-menu{display:flex}
+
+    .hero{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center;padding:80px 0}
+    .hero h1{font-size:46px;font-weight:800;color:var(--black);line-height:1.2}
+    .hero p{margin-top:18px;color:var(--muted);font-size:16px;max-width:520px}
+    .hero-ctas{margin-top:28px;display:flex;gap:14px}
+    .hero-image{display:flex;justify-content:center}
+    .hero-image img{max-width:420px;width:100%;border-radius:20px;box-shadow:0 8px 24px rgba(0,0,0,0.1)}
+
+    section{padding:70px 0;position:relative}
+    section h2{font-size:30px;font-weight:700;text-align:center;margin-bottom:50px;color:var(--black);position:relative}
+    section h2::after{content:"";display:block;width:80px;height:4px;background:var(--green);margin:14px auto 0;border-radius:4px}
+
+    .stats-section{background:#D7F2EE;padding:60px 20px;border-radius:20px;margin:60px auto;max-width:var(--maxw)}
+    .stats-title{text-align:center;font-size:26px;font-weight:700;color:var(--black);margin-bottom:40px}
+    .stats-title span{color:var(--green)}
+    .stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:30px;text-align:center}
+    .stat-item{display:flex;flex-direction:column;align-items:center;gap:8px}
+    .stat-item .icon{background:#000;color:#fff;width:50px;height:50px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px}
+    .stat-item h3{font-size:28px;font-weight:700;color:var(--black)}
+    .stat-item p{color:var(--muted-2);font-size:14px}
+
+    .feature-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:24px}
+    .feature{background:var(--card);padding:28px;border-radius:14px;box-shadow:0 4px 14px rgba(0,0,0,0.05);border:1px solid #e5e7eb;transition:.3s}
+    .feature:hover{transform:translateY(-4px);box-shadow:0 6px 18px rgba(0,0,0,0.08)}
+    .feature img, .card img{width:100%;border-radius:10px;margin-bottom:12px}
+
+    .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:24px}
+    .card{background:#fff;padding:24px;border-radius:14px;border:1px solid #e5e7eb;box-shadow:0 4px 14px rgba(0,0,0,0.05);transition:.3s}
+    .card:hover{transform:translateY(-3px);box-shadow:0 6px 18px rgba(0,0,0,0.08)}
+
+    .testimonial{background:#fff;padding:24px;border-radius:14px;border:1px solid #e5e7eb;box-shadow:0 4px 14px rgba(0,0,0,0.05);font-size:15px;color:var(--black)}
+    .faq-item{background:#fff;padding:16px;border-radius:12px;border:1px solid #e5e7eb;margin-bottom:14px;box-shadow:0 2px 8px rgba(0,0,0,0.05)}
+    .faq-item summary{cursor:pointer;font-weight:600;color:var(--black)}
+
+    footer{background:#fff;padding:36px 0;border-top:1px solid #e5e7eb;color:var(--muted-2);font-size:14px;text-align:center;margin-top:50px}
+
+    @media(max-width:900px){
+      .hero{grid-template-columns:1fr;text-align:center}
+      .hero p{margin-left:auto;margin-right:auto}
+      .hero-ctas{justify-content:center}
+    }
+
+    .contact-grid {display: grid;grid-template-columns: 1fr 1fr;gap: 40px;margin-top: 40px;}
+    .contact-info {font-size: 16px;line-height: 1.8;background: #f9f9f9;padding: 28px;border-radius: 14px;border: 1px solid #e5e7eb;box-shadow: 0 4px 14px rgba(0,0,0,0.05);}
+    .contact-info a {color: var(--green);text-decoration: none;font-weight: 500;}
+    .contact-form {display: flex;flex-direction: column;gap: 16px;background: #fff;padding: 28px;border-radius: 14px;border:1px solid #e5e7eb;box-shadow:0 4px 14px rgba(0,0,0,0.05);}
+    .contact-form input,.contact-form textarea {padding: 12px 14px;border: 1px solid #ddd;border-radius: 10px;font-size: 15px;outline: none;transition: all 0.3s ease;}
+    .contact-form textarea {min-height: 120px;resize: none;}
+    .contact-form input:focus,.contact-form textarea:focus {border-color: var(--green);box-shadow: 0 0 0 3px rgba(0,194,154,0.2);}
+    .contact-form button {align-self: flex-start;padding: 12px 28px;font-size: 15px;}
+  </style>
+</head>
+<body>
+  <div class="top-banner" data-animate>
+    <span>Join our Oct 1st Webinar: Live Demo on Cybersecurity</span>
+    <a href="#">Save Your Seat</a>
+  </div>
+
+  <!-- NAV -->
+  <nav class="nav" data-animate>
+    <div class="container nav-inner">
+      <div class="brand">
+        <img src="logo.png" alt="Logo">
+        CyberSisco
+      </div>
+      <div class="nav-links">
+        <div class="dropdown">
+          <a href="#products">Products ▾</a>
+          <div class="dropdown-menu">
+            <a href="#products">Workshops</a>
+            <a href="#products">Cyber Labs</a>
+            <a href="#products">Tools</a>
+          </div>
+        </div>
+        <div class="dropdown">
+          <a href="#solutions">Solutions ▾</a>
+          <div class="dropdown-menu">
+            <a href="#solutions">Training</a>
+            <a href="#solutions">Research</a>
+            <a href="#solutions">Collaboration</a>
+          </div>
+        </div>
+        <a href="#activities">Activities</a>
+        <a href="#activity">Our Activity</a>
+        <a href="#contact">Contact</a>
+        <a class="btn white" href="#contact">Request a Demo</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <header class="container hero" data-animate>
+    <div>
+      <h1>Learn to Solve Cybercrime in the Digital World 💻</h1>
+      <p>Empowering students, professionals, and enthusiasts with high-impact training, workshops, and research-driven cybersecurity programs.</p>
+      <div class="hero-ctas">
+        <a class="btn" href="#contact">Get Started</a>
+        <a class="btn white" href="#activities">Our Programs</a>
+      </div>
+    </div>
+    <div class="hero-image" data-animate>
+      <img src="logo2.png" alt="CyberSisco Hero">
+    </div>
+  </header>
+
+  <!-- Did You Know -->
+  <section class="stats-section" data-animate>
+    <h2 class="stats-title">Did <span>You Know?</span></h2>
+    <div class="stats-grid">
+      <div class="stat-item"><div class="icon">🔒</div><h3>72%</h3><p>businesses experienced DNS attack</p></div>
+      <div class="stat-item"><div class="icon">🛡️</div><h3>60,000</h3><p>malware & spyware domains categorised a day</p></div>
+      <div class="stat-item"><div class="icon">✉️</div><h3>53</h3><p>predefined categories by default</p></div>
+      <div class="stat-item"><div class="icon">💻</div><h3>7%</h3><p>of websites tested by Google for malware were infected</p></div>
+    </div>
+  </section>
+
+  <!-- What We Do -->
+  <section id="activities" data-animate>
+    <div class="container">
+      <h2>What We Do</h2>
+      <div class="feature-grid">
+        <div class="feature">
+          <img src="img6.png" alt="Workshops">
+          <h4>Workshops & Training</h4>
+          <p>Hands-on programs on ethical hacking, incident response, and forensics.</p>
+        </div>
+        <div class="feature">
+          <img src="img1.png" alt="Conferences">
+          <h4>Conferences & Webinars</h4>
+          <p>Events connecting learners with industry experts and thought leaders.</p>
+        </div>
+        <div class="feature">
+          <img src="img4.png" alt="Research">
+          <h4>Research & Projects</h4>
+          <p>Collaborative initiatives with academia, industry, and government.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Our Products -->
+  <section id="products" style="background:#fff" data-animate>
+    <div class="container">
+      <h2>Our Products</h2>
+      <div class="cards">
+        <div class="card">
+          <img src="img8.png" alt="Workshops">
+          <h4>Workshops</h4>
+          <p>Hands-on sessions to learn cybersecurity practically.</p>
+        </div>
+        <div class="card">
+          <img src="img2.png" alt="Cyber Labs">
+          <h4>Cyber Labs</h4>
+          <p>Virtual labs for penetration testing and simulations.</p>
+        </div>
+        <div class="card">
+          <img src="img3.png" alt="Tools">
+          <h4>Tools</h4>
+          <p>Custom utilities to practice ethical hacking and forensics.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Solutions -->
+  <section id="solutions" data-animate>
+    <div class="container">
+      <h2>Our Solutions</h2>
+      <div class="cards">
+        <div class="card">
+          <img src="img7.png" alt="Training">
+          <h4>Training</h4>
+          <p>Corporate & student training for cybersecurity skills.</p>
+        </div>
+        <div class="card">
+          <img src="img6.png" alt="Research">
+          <h4>Research</h4>
+          <p>Collaboration with academia & industry for innovation.</p>
+        </div>
+        <div class="card">
+          <img src="img9.png" alt="Collaboration">
+          <h4>Collaboration</h4>
+          <p>Partner with institutions & law enforcement for projects.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Recent Projects -->
+  <section id="research" style="background:#fff" data-animate>
+    <div class="container">
+      <h2>Recent Projects & Events</h2>
+      <div class="cards">
+        <div class="card">
+          <img src="project1.jpg" alt="Cyber Conclave">
+          <h4>Cyber Conclave 2025</h4>
+          <p>Bringing together industry, students and law enforcement for collaboration.</p>
+        </div>
+        <div class="card">
+          <img src="project2.jpg" alt="Forensics Case Study">
+          <h4>Forensics Case Study</h4>
+          <p>Research on digital investigations and data recovery.</p>
+        </div>
+        <div class="card">
+          <img src="project3.jpg" alt="PenTest Sprint">
+          <h4>PenTest Sprint</h4>
+          <p>A collaborative testing event for student teams.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Our Activity (already added) -->
+  <section id="activity" data-animate style="background:#fff">
+    <div class="container">
+      <h2>Our Activity</h2>
+      <p style="text-align:center;color:var(--muted);margin-top:-20px;margin-bottom:40px;font-size:16px">
+        Check out our latest posts, posters, and activities
+      </p>
+      <div class="cards">
+        <div class="card">
+          <img src="poster1.jpg" alt="Activity Poster 1">
+          <h4>Cyber Awareness Drive</h4>
+          <p>Highlights from our recent awareness program.</p>
+        </div>
+        <div class="card">
+          <img src="poster2.jpg" alt="Activity Poster 2">
+          <h4>Workshop Highlights</h4>
+          <p>Snapshots from our ethical hacking workshop.</p>
+        </div>
+        <div class="card">
+          <img src="poster3.jpg" alt="Activity Poster 3">
+          <h4>Research Collaboration</h4>
+          <p>Poster on our joint research with universities.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials -->
+  <section class="testimonials" data-animate>
+    <div class="container">
+      <h2>What Students Say</h2>
+      <div class="cards">
+        <div class="testimonial">“The hands-on labs made me confident to apply for security roles.” — A. Sharma</div>
+        <div class="testimonial">“Expert mentors gave us priceless real-world experience.” — R. Khan</div>
+        <div class="testimonial">“Projects with law enforcement boosted my resume.” — S. Mehta</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="faq" data-animate>
+    <div class="container">
+      <h2>FAQs</h2>
+      <details class="faq-item"><summary>What courses do you offer?</summary><p>Ethical hacking, network security, incident response, and forensics workshops.</p></details>
+      <details class="faq-item"><summary>Do you provide internships?</summary><p>Yes, we partner with industry and law enforcement for placements.</p></details>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section id="contact" style="background:#fff" data-animate>
+    <div class="container">
+      <h2>Contact</h2>
+      <p style="text-align:center;color:var(--muted);margin-top:-20px;margin-bottom:40px;font-size:16px">
+        Get in Touch with our team for collaborations, queries or support
+      </p>
+      <div class="contact-grid">
+        <div class="contact-info">
+          <p>✉️ <strong>Email</strong><br>
+            <a href="mailto:cybersisco.edu@gmail.com">cybersisco.edu@gmail.com</a></p>
+          <p>📞 <strong>Phone</strong><br>
+            +91 8173919410</p>
+          <p>🌐 <strong>Follow</strong><br>
+            <a href="#">@cybersisco</a></p>
+          <div style="margin-top:20px;border-radius:12px;overflow:hidden;box-shadow:0 4px 14px rgba(0,0,0,0.08)">
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!..." 
+              width="100%" height="200" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+          </div>
+        </div>
+        <form class="contact-form" onsubmit="event.preventDefault();alert('Message received!')">
+          <input type="text" placeholder="Full name" required>
+          <input type="email" placeholder="Email" required>
+          <textarea placeholder="Message" required></textarea>
+          <button class="btn">Send</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <footer data-animate>
+    © 2025 CyberSisco — All rights reserved
+  </footer>
+
+  <script>
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if(entry.isIntersecting){
+          entry.target.classList.add('active');
+        }
+      });
+    }, {threshold:0.1});
+    document.querySelectorAll('[data-animate]').forEach(el=>observer.observe(el));
+  </script>
+</body>
+</html>
+
+
